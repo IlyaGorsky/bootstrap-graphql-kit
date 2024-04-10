@@ -1,0 +1,77 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:@typescript-eslint/recommended",
+        "eslint-config-prettier"        
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaVersion": "latest",
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint",
+        "eslint-plugin-prettier"
+    ],
+    "rules": { },
+    "overrides": [  
+      {
+        "files": "*.graphql",
+        "extends": "plugin:@graphql-eslint/operations-recommended",
+        "plugins": ["@graphql-eslint"],
+        "rules": {
+          "prettier/prettier": [2, { "parser": "graphql" }],
+          "spaced-comment": "off",
+          //не корректно работает правило "@graphql-eslint/avoid-duplicate-fields": "error",
+          "@graphql-eslint/executable-definitions": "error",
+          "@graphql-eslint/fields-on-correct-type": "error",
+          "@graphql-eslint/fragments-on-composite-type": "error",
+          "@graphql-eslint/known-argument-names": "error",
+          "@graphql-eslint/known-directives": "error",
+          "@graphql-eslint/known-type-names": "error",
+          "@graphql-eslint/no-anonymous-operations": "error",
+          "@graphql-eslint/no-deprecated": "error",
+          "@graphql-eslint/no-unused-variables": "error",
+          "@graphql-eslint/provided-required-arguments": "error",
+          "@graphql-eslint/scalar-leafs": "error",
+          "@graphql-eslint/unique-argument-names": "error",
+          "@graphql-eslint/unique-input-field-names": "error",
+          "@graphql-eslint/unique-variable-names": "error",
+          "@graphql-eslint/value-literals-of-correct-type": "error",
+          "@graphql-eslint/variables-are-input-types": "error",
+          "@graphql-eslint/variables-in-allowed-position": "error",
+          "@graphql-eslint/require-id-when-available": "off",
+          // 20 is backend constant value
+          "@graphql-eslint/selection-set-depth": ["error", { "maxDepth": 20 }],
+          "@graphql-eslint/naming-convention": [
+            "error",
+            {
+              "VariableDefinition": "camelCase",
+              "OperationDefinition": {
+                "style": "PascalCase",
+                "forbiddenPrefixes": ["Query", "Mutation", "Subscription", "Get"],
+                "forbiddenSuffixes": ["Query", "Mutation", "Subscription"]
+              },
+              "FragmentDefinition": {
+                "style": "camelCase",
+                "forbiddenPrefixes": ["Fragment"],
+                "forbiddenSuffixes": ["Fragment"]
+              }
+            }
+          ],
+          "@graphql-eslint/match-document-filename": [
+            "error",
+            {
+              "fileExtension": ".graphql",
+              "query": { "style": "camelCase", "suffix": ".query" },
+              "mutation": { "style": "camelCase", "suffix": ".mutation" },
+              "fragment": { "style": "camelCase", "suffix": ".fragment" }
+            }
+          ]
+        }
+      }]
+}

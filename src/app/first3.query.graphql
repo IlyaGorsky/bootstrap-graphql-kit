@@ -1,0 +1,8 @@
+query First3($filterName: String!) {
+    characters(filter: { name: $filterName }) {
+        results {
+            name
+            status
+        }
+    }
+}

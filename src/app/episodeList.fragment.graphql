@@ -1,0 +1,3 @@
+fragment episodeList on Episode {
+    name
+}
