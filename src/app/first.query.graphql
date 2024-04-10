@@ -1,0 +1,12 @@
+fragment characterCard on Character {
+    id
+    name
+}
+
+query First {
+    characters {
+        results {
+            ...characterCard
+        }
+    }
+}

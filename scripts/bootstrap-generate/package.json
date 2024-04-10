@@ -1,0 +1,7 @@
+{
+    "license": "MIT",
+    "name": "bootstrap-generate",
+    "version": "0.1",
+    "type": "module",
+    "main": "./dist/index.js"
+}
