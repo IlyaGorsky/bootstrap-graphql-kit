@@ -1,5 +1,5 @@
 import { type DocumentNode } from 'graphql'
-
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core';
 /**
  * @see https://spec.graphql.org/October2021/#sec-Errors.Error-result-format
  */
@@ -26,13 +26,13 @@ interface SuccessResponse<T> {
 
 export type Response<T extends object> = SuccessResponse<T> | FailResponse<T>
 
-export type Query = DocumentNode | string
+export type Query<D = object, V = object> = TypedDocumentNode<D, V> | DocumentNode | string
 
 export type Variables<T extends object> = T
 
 export interface RequestFn {
     <D extends object, V extends object>(
-        query: Query,
+        query: Query<D, V>,
         variables?: Variables<V>
     ): Promise<Response<D>>
 }

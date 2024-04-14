@@ -1,7 +1,6 @@
 query First2($page: Int = 1) {
     episodes(page: $page) {
         results {
-            name
             ...episodeList
         }
         info {

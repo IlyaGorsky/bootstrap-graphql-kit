@@ -1,5 +1,7 @@
 /* eslint-disable no-useless-catch */
 import { type ASTNode, type OperationDefinitionNode } from 'graphql'
+import { print } from '@0no-co/graphql.web'
+
 import type { RequestFn } from './types'
 
 const isOperation = (node: ASTNode): node is OperationDefinitionNode =>
@@ -22,7 +24,7 @@ const request: <U extends string>(url: U) => RequestFn = (url) => async (query, 
             },
             body: JSON.stringify({
                 query:
-                    typeof query === 'string' ? query : query.loc?.source.body,
+                    typeof query === 'string' ? query : print(query),
                 variables: variables ?? null,
                 operationName,
             }),

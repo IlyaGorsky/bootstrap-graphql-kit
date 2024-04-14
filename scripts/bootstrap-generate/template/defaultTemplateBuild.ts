@@ -6,21 +6,19 @@ const r = Mustache.render
 const required = `
     fetch{{operationResultType}} =
         (v: {{variableTypes}}) =>
-            {{fnName}}.{{operation}}<{{operationResultType}}>
-                ({{query}}, v);
+            {{fnName}}.{{operation}}({{query}}, v);
 `
 
 const partial = `
     fetch{{operationResultType}} =
         (v?: {{variableTypes}}) =>
-            {{fnName}}.{{operation}}<{{operationResultType}}>
-                ({{query}}, v ?? {});
+            {{fnName}}.{{operation}}({{query}}, v ?? {});
 `
 
 const standard = `
     fetch{{operationResultType}} =
         () =>
-            {{fnName}}.{{operation}}<{{operationResultType}}>({{query}});
+            {{fnName}}.{{operation}}({{query}});
 `
 
 const t: TemplateFn = (props) => {

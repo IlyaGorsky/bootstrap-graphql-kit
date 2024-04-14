@@ -1,6 +1,6 @@
 import * as Types from '../../../types/schema'
 
-import gql from 'graphql-tag'
+import { gql } from '@/gql'
 import { fetcher as fetcher } from '../../api/api'
 import { useQuery } from '@tanstack/react-query'
 
@@ -25,21 +25,22 @@ export type First3Query = { __typename: 'Query' } & {
     >
 }
 
-export const First3Document = gql`
-    query First3($filterName: String!) {
-        characters(filter: { name: $filterName }) {
-            results {
-                name
-                status
-                __typename
-            }
-            __typename
-        }
-        __typename
+export const First3Document = gql(
+    `query First3($filterName: String!) {
+  characters(filter: {name: $filterName}) {
+    results {
+      name
+      status
+      __typename
     }
-`
+    __typename
+  }
+  __typename
+}`,
+    []
+)
 export const fetchFirst3Query = (v: First3QueryVariables) =>
-    fetcher.query<First3Query>(First3Document, v)
+    fetcher.query(First3Document, v)
 
 export const mockFirst3Query = (
     resolve: (v: First3QueryVariables) => First3Query

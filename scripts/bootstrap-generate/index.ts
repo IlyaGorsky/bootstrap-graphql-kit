@@ -1,8 +1,8 @@
 import { CodegenPlugin, oldVisit } from '@graphql-codegen/plugin-helpers'
-import { BootStrapVisitor } from './visitor.js'
 import { concatAST, type DocumentNode, type FragmentDefinitionNode, Kind } from 'graphql';
-import type { LoadedFragment } from '@graphql-codegen/visitor-plugin-common';
+import { type LoadedFragment } from '@graphql-codegen/visitor-plugin-common';
 import type { BootStrapRawConfig } from './types.js';
+import { BootStrapVisitor } from './visitor.js'
 /**
  * Для того чтобы написать плагин на typescript. Используется 
  * @see https://the-guild.dev/graphql/codegen/docs/getting-started/esm-typescript-usage
@@ -35,19 +35,17 @@ export const plugin: CodegenPlugin<BootStrapRawConfig>['plugin'] = (schema, docu
         ...(config.externalFragments || [])
     )   
     const visitor = new BootStrapVisitor(schema, allFragments, config, documents);
-
     const result = oldVisit(allAst, {
         // @ts-expect-error: 'leave' is not a NewVisitor['leave']
         leave: visitor,
         SelectionSet: visitor.addTypenameToDocument(),
     })
-
     const definitions = result.definitions.filter((t: unknown) => typeof t === 'string').join('\n') as unknown as string;
     const content = [visitor.fragments, definitions].join('\n');
-
+    
     return {
         prepend: visitor.getImports(),
-        content: content,
+        content,
     }
 }
 

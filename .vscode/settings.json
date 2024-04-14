@@ -2,7 +2,7 @@
     "typescript.tsdk": "node_modules/typescript/lib",
     "cSpell.words": [
         "Кодогенерация",
-        "graphqlrc",
-        "Morty"
-    ]
+        "graphqlrc"
+    ],
+    "typescript.enablePromptUseWorkspaceTsdk": true,
 }

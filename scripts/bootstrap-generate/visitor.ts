@@ -4,8 +4,14 @@ import {
     LoadedFragment,
     ClientSideBaseVisitor,
     ClientSideBasePluginConfig,
+    getConfigValue,
 } from '@graphql-codegen/visitor-plugin-common'
-import type { GraphQLSchema } from 'graphql'
+import { print } from 'graphql'
+import type {
+    FragmentDefinitionNode,
+    GraphQLSchema,
+    OperationDefinitionNode,
+} from 'graphql'
 import type { TemplateProps } from './template/types.js'
 import type { BootStrapRawConfig } from './types.js'
 import defaultTemplateBuild from './template/defaultTemplateBuild.js'
@@ -42,7 +48,9 @@ export class BootStrapVisitor extends ClientSideBaseVisitor<
             schema,
             fragments,
             config,
-            { fetcherImport: config.fetcherImport },
+            {
+                fetcherImport: getConfigValue(config.fetcherImport, ''),
+            },
             documents
         )
     }
@@ -51,23 +59,43 @@ export class BootStrapVisitor extends ClientSideBaseVisitor<
         const form = this._documents[0].location!
         const to = path.resolve(process.cwd(), p)
         const fetcherPath = path.relative(form, to)
-        return fetcherPath.replace(path.extname(fetcherPath), '');
+        return fetcherPath.replace(path.extname(fetcherPath), '')
     }
 
     protected generateFetchImport(importString: string): string {
         const fetcherImport = this._parseImport(importString)
         if (fetcherImport.moduleName) {
             if (path.extname(fetcherImport.moduleName)) {
-                fetcherImport.moduleName = this.resolvePathImportInDocumentOperation(fetcherImport.moduleName)
+                fetcherImport.moduleName =
+                    this.resolvePathImportInDocumentOperation(
+                        fetcherImport.moduleName
+                    )
             }
             if (fetcherImport.propName) {
                 return `import { ${this.fetcherFnName} as ${fetcherImport.propName}} from '${fetcherImport.moduleName}'`
             }
             return `import ${this.fetcherFnName} from '${fetcherImport.moduleName}'`
-        } 
-        return '';
+        }
+        return ''
     }
 
+    protected _gql(
+        node: OperationDefinitionNode | FragmentDefinitionNode
+    ): string {
+        const includeNestedFragments =
+            this.config.documentMode === 'documentNode' ||
+            this.config.documentMode === 'string' ||
+            (this.config.dedupeFragments && node.kind === 'OperationDefinition')
+        const fragmentNames = this._extractFragments(
+            node,
+            includeNestedFragments
+        )
+        const fragments = this._transformFragments(fragmentNames)
+        const gqlImport = this._parseImport(this.config.gqlImport)
+        const doc = this._prepareDocument(`\`${print(node)}\``)
+
+        return `${gqlImport.propName}(${doc},[${fragments.toString()}])`
+    }
 
     protected renderTemplate(props: TemplateProps) {
         return this.templates
@@ -109,21 +137,23 @@ export class BootStrapVisitor extends ClientSideBaseVisitor<
             baseImports.push('\n')
             return baseImports
         }
-        
-        const imports = [];
+
+        const imports = []
 
         imports.push(this.generateFetchImport(this.config.fetcherImport))
-        
+
         this.templates.forEach((template) => {
             if (template.imports) {
                 template.imports.forEach(([importName, importModule]) => {
-                    imports.push(`import { ${importName} } from '${importModule}'`)
+                    imports.push(
+                        `import { ${importName} } from '${importModule}'`
+                    )
                 })
             }
         })
 
         imports.push('\n')
-    
+
         return [...super.getImports(options), ...imports]
     }
 }

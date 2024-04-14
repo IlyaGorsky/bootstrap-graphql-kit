@@ -4,10 +4,12 @@
 schema: ".codegen/schema.graphql"
 documents:
   - "./src/**/*.graphql"
+
 ignoreNoDocuments: true
 # https://the-guild.dev/graphql/config/docs/user/usage#extensions
 extensions:
-  # Подробная информация о graphql-codegen-cli
+
+  # Подробная информация о graphql-codegen
   # @see https://the-guild.dev/graphql/codegen/docs/getting-started/installation
   codegen:
     errorsOnly: true
@@ -38,8 +40,9 @@ extensions:
           - typescript
           - add:
               content: "/* eslint-disable */\n \n /* Auto generated file */ \n "
-      ./src:
-        # Пресет на каждую операцию запускает плагины
+      .src/:
+
+        # Запускает на каждую операцию плагин
         # @see https://the-guild.dev/graphql/codegen/plugins/presets/near-operation-file-preset
         preset: 'near-operation-file'
         # Настройка output
@@ -51,6 +54,7 @@ extensions:
         # @see https://the-guild.dev/graphql/codegen/plugins/typescript/typescript-operations
         config:
           # skipTypeNameForRoot: true
+          gqlImport: '@/gql#gql'
           nonOptionalTypename: true
           preResolveTypes: false
           namingConvention:

@@ -21,7 +21,7 @@ const partial = `
         (v?: {{variableTypes}}, enabled: boolean = true) =>
             useQuery({
                 queryFn: () =>
-                    {{fnName}}.{{operation}}<{{operationResultType}}>({{query}}, v ?? {}),
+                    {{fnName}}.{{operation}}({{query}}, v ?? {}),
                 queryKey:['{{operationName}}', v],
                 enabled
             })           
@@ -31,7 +31,7 @@ const standard = `
     use{{operationResultType}} =
         (enabled: boolean = true) =>
             useQuery({
-                queryFn: async () => {{fnName}}.{{operation}}<{{operationResultType}}>({{query}}),
+                queryFn: async () => {{fnName}}.{{operation}}({{query}}),
                 queryKey:['{{operationName}}'],
                 enabled
             })

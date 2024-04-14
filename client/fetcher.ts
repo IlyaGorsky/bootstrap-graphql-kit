@@ -11,11 +11,11 @@ export class Fetcher {
         this.origin = graphql.origin
     }
 
-    query<D extends object, V extends object = object>(q: Query, v?: V) {
+    query<D extends object, V extends object = object>(q: Query<D, V> , v?: V) {
         return request(this.url)<D,V>(q, v)
     }
     
-    mutation<D extends object, V extends object = object>(q: Query, v?: V) {
+    mutation<D extends object, V extends object = object>(q: Query<D, V>, v?: V) {
         return request(this.url)<D,V>(q, v)
     }
 }
