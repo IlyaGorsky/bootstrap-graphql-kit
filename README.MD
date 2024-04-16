@@ -177,5 +177,5 @@ yarn lint
 
 Все ссылки на материал, который был в докладе, и сама презентация
 
-- [Презентация]()
+- [Презентация](https://docs.google.com/presentation/d/1K7FBa-NrWeqGlUsXOHlxNCjxT9bUV_Tp/edit?usp=drive_link&ouid=114002188979982635975&rtpof=true&sd=true)
 - [Ссылки на все ссылки](./links.md)
